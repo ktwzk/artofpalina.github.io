@@ -23,6 +23,16 @@
         </form>
     </div>
 
+    <div id="inactivityPopup" class="popup-overlay" style="display: none;">
+        <div class="popup-content">
+            <h1 style="color: white; font-size: 6em;">Jste ještě tady?</h1>
+            <div class="popup-buttons">
+                <button id="continueButton" class="captcha-button">Ano</button>
+            </div>
+            <div id="timerDisplay" style="color: white; font-size: 3em; margin: 90px;"></div>
+        </div>
+    </div>
+
     <script>
         function displayStoredTexts() {
             const storedTexts = JSON.parse(localStorage.getItem('userTexts') || '[]');
@@ -54,6 +64,64 @@
         }
 
         displayStoredTexts();
+
+
+        // Inactivity detection
+        let inactivityTime = 0;
+        const inactivityThreshold = 10; // 10 seconds for the popup to appear
+        const popupTimerDuration = 15; // 10 seconds for the popup timer
+        let inactivityTimer;
+        let popupCountdownTimer;
+        let currentPopupTime = popupTimerDuration;
+
+        const inactivityPopup = document.getElementById('inactivityPopup');
+        const continueButton = document.getElementById('continueButton');
+        const timerDisplay = document.getElementById('timerDisplay');
+
+        function resetInactivityTimer() {
+            if (inactivityPopup.style.display === 'flex') {
+                return; // Do not reset if popup is visible
+            }
+            clearTimeout(inactivityTimer);
+            clearInterval(popupCountdownTimer);
+            inactivityTime = 0;
+            inactivityPopup.style.display = 'none';
+            currentPopupTime = popupTimerDuration; // Reset popup timer
+            startInactivityTimer();
+        }
+
+        function startInactivityTimer() {
+            inactivityTimer = setTimeout(() => {
+                inactivityPopup.style.display = 'flex';
+                startPopupCountdown();
+            }, inactivityThreshold * 1000); // Convert to milliseconds
+        }
+
+        function startPopupCountdown() {
+            timerDisplay.textContent = `${currentPopupTime}`;
+            popupCountdownTimer = setInterval(() => {
+                currentPopupTime--;
+                timerDisplay.textContent = `${currentPopupTime}`;
+                if (currentPopupTime <= 0) {
+                    clearInterval(popupCountdownTimer);
+                    window.location.href = 'index.html'; 
+                }
+            }, 1000);
+        }
+
+        // Event listeners for user activity
+        document.addEventListener('mousemove', resetInactivityTimer);
+        document.addEventListener('keypress', resetInactivityTimer);
+
+        // Handle popup button clicks
+        continueButton.addEventListener('click', () => {
+            inactivityPopup.style.display = 'none';
+            resetInactivityTimer();
+        });
+
+
+        // Start the timer when the page loads
+        startInactivityTimer();
     </script>
 </body>
 
