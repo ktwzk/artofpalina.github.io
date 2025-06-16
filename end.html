@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>CAPTCHA</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="menu-card">
+        <div class="captcha-header" id="captchaHeader">
+            <strong>Proc jste vybrali tyto vzorky?</strong>
+        </div>
+        <div class="captcha-grid" id="grid">
+            <!-- Images will be displayed here -->
+        </div>
+        <p>Vaše zadané údaje nebudou ukládány, zaznamenávány ani žádným způsobem archivovány.<br>Poskytnuté informace nebudou použity k tréninku žádného strojového učení ani k jinému typu analýzy či zpracování.</p>
+        <form method="POST" class="captcha-body" onsubmit="submitForm(event)">
+            
+            <div class="form-footer">
+                <textarea id="textInput" class="captcha-input" placeholder="Proc jste vybrali tyto vzorky? Napiste svoje odpovēdi sem." rows="5" required></textarea>
+            </div>
+            <button type="submit" class="captcha-button">Send</button>
+        </form>
+    </div>
+
+    <script>
+        // Display the selected images from local storage
+        function displaySelectedImages() {
+            const selectedSquares = JSON.parse(localStorage.getItem('selectedSquares') || '[]');
+            
+            // Store the squares temporarily before clearing localStorage
+            const squaresToDisplay = [...selectedSquares];
+            
+            // Clear localStorage immediately so next run will show new squares
+            localStorage.removeItem('selectedSquares');
+            
+            
+            if (squaresToDisplay.length > 0) {
+                // Get the grid container
+                const imageGrid = document.getElementById('grid');
+                
+                // Get the last 3 selections (or all if less than 3)
+                const lastThreeSquares = squaresToDisplay.slice(-3);
+                
+                lastThreeSquares.forEach(square => {
+                    // Create a form-like container for each image to match index.html style
+                    const imgContainer = document.createElement('div'); // Changed from form to div
+                    imgContainer.className = 'menu-form';
+                    
+                    // Create button-like container
+                    const buttonLike = document.createElement('div'); // Changed from button to div
+                    buttonLike.className = 'menu-button';
+                    
+                    // Create the image
+                    const img = document.createElement('img');
+                    // Use the stored imageSrc directly
+                    img.src = square.imageSrc;
+                    img.alt = 'Selected image';
+                    img.style.height = '256px';
+                    img.style.verticalAlign = 'middle';
+                    
+                    buttonLike.appendChild(img);
+                    imgContainer.appendChild(buttonLike);
+                    imageGrid.appendChild(imgContainer);
+                });
+            }
+        }
+
+        function submitForm(e) {
+            e.preventDefault();
+            const textInput = document.getElementById('textInput');
+            const storedTexts = JSON.parse(localStorage.getItem('userTexts') || '[]');
+            const inputText = textInput.value.trim();
+            storedTexts.push(inputText);
+            localStorage.setItem('userTexts', JSON.stringify(storedTexts));
+            // The text input is handled above, now redirect to texts.html
+            window.location.href = 'texts.html';
+        }
+
+        displaySelectedImages();
+    </script>
+</body>
+
+</html>

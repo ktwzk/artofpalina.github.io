@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>CAPTCHA</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="menu-card">
+        <div class="captcha-header" id="captchaHeader">
+            <strong>Vyberte jeden z testovacích vzorků.</strong>
+        </div>
+        <div class="captcha-grid" id="grid">
+            <form method="POST" class="menu-form" onsubmit="submitForm01(event)">
+                <input type="hidden" name="correct" id="correctInput">
+                <button type="submit" class="menu-button">
+                    <img src="01/cover.jpg" alt="Verify" style="height: 256px; vertical-align: middle;">
+                </button>
+            </form>
+            <form method="POST" class="menu-form" onsubmit="submitForm02(event)">
+                <input type="hidden" name="correct" id="correctInput">
+                <button type="submit" class="menu-button">
+                    <img src="02/cover.jpg" alt="Verify" style="height: 256px; vertical-align: middle;">
+                </button>
+            </form>
+            <form method="POST" class="menu-form" onsubmit="submitForm03(event)">
+                <input type="hidden" name="correct" id="correctInput">
+                <button type="submit" class="menu-button">
+                    <img src="03/cover.jpg" alt="Verify" style="height: 256px; vertical-align: middle;">
+                </button>
+            </form>
+        </div>  
+    </div>
+
+    <script>
+        function submitForm01(e) {
+            e.preventDefault();
+            window.location.href = '01/01.html';
+        }
+        function submitForm02(e) {
+            e.preventDefault();
+            window.location.href = '02/01.html';
+        }
+        function submitForm03(e) {
+            e.preventDefault();
+            window.location.href = '03/01.html';
+        }
+
+    </script>
+</body>
+
+</html>

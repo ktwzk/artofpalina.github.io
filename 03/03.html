@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>CAPTCHA</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../style.css">
+</head>
+
+<body>
+    <div class="captcha-card">
+        <div class="captcha-header" id="captchaHeader">
+            <strong>Vyberte to, co vypadá správně.</strong>
+        </div>
+        <form method="POST" class="captcha-body" onsubmit="submitForm(event)">
+            <div class="captcha-grid" id="captchaGrid">
+                <!-- Images go here -->
+            </div>
+            <input type="hidden" name="correct" id="correctInput">
+            <!-- Removed submit button as it's no longer needed -->
+        <div class="form-footer" style="display: none;">
+                <button type="submit" class="captcha-button">Potvrdit</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        const headerElement = document.getElementById('captchaHeader');
+        const captchaGrid = document.getElementById('captchaGrid');
+        // const correctInput = document.getElementById('correctInput'); // Removed
+
+        // List of images in each directory (these must be known/hardcoded or fetched from backend)
+        const dirAImages = ['img_0.jpg', 'img_1.jpg', 'img_2.jpg', 'img_3.jpg', 'img_4.jpg', 'img_5.jpg', 'img_6.jpg', 'img_7.jpg', 'img_8.jpg'];
+        const dirBImages = ['img_0.jpg', 'img_1.jpg', 'img_2.jpg', 'img_3.jpg', 'img_4.jpg', 'img_5.jpg', 'img_6.jpg', 'img_7.jpg', 'img_8.jpg'];
+
+        // Combine and shuffle images from both directories
+        function getMixedImages() {
+            const allImages = [];
+
+            // Add full paths with directories
+            dirAImages.forEach(img => allImages.push({ src: `A/${img}` })); // Removed isCorrect
+            dirBImages.forEach(img => allImages.push({ src: `B/${img}` })); // Removed isCorrect
+
+            // Shuffle array
+            for (let i = allImages.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [allImages[i], allImages[j]] = [allImages[j], allImages[i]];
+            }
+
+            // Return first 9 images
+            return allImages.slice(0, 9);
+        }
+
+        function generateCaptchaGrid() {
+            const images = getMixedImages();
+            // const correctIndex = images.findIndex(img => img.isCorrect); // Removed
+            // correctInput.value = correctIndex; // Removed
+
+            images.forEach((image, i) => {
+                const label = document.createElement('label');
+                label.className = 'captcha-option';
+
+                const input = document.createElement('input');
+                input.type = 'radio';
+                input.name = 'selected';
+                input.value = i;
+                input.required = true;
+                
+                // Add click event to automatically submit when clicked
+                input.addEventListener('change', function() {
+                    // Store the selected image source in local storage
+                    const selectedSquares = JSON.parse(localStorage.getItem('selectedSquares'));
+                    selectedSquares.push({
+                        page: '03/03',
+                        imageSrc: `03/${image.src}` // Store actual image src with parent directory
+                    });
+                    localStorage.setItem('selectedSquares', JSON.stringify(selectedSquares));
+                    
+                    // Submit the form automatically
+                    setTimeout(() => submitForm(new Event('submit')), 300); // Small delay for visual feedback
+                });
+
+                const content = document.createElement('div');
+                content.className = 'option-content';
+
+                const img = document.createElement('img');
+                img.src = image.src;
+
+                const checkIcon = document.createElement('div');
+                checkIcon.className = 'check-icon';
+                checkIcon.textContent = '✔';
+
+                content.appendChild(img);
+                content.appendChild(checkIcon);
+
+                label.appendChild(input);
+                label.appendChild(content);
+                captchaGrid.appendChild(label);
+            });
+        }
+
+        function submitForm(e) {
+            e.preventDefault();
+            window.location.href = '../end.html';
+        }
+
+        generateCaptchaGrid();
+    </script>
+</body>
+
+</html>
