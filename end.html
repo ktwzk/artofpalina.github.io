@@ -11,16 +11,16 @@
 <body>
     <div class="menu-card">
         <div class="captcha-header" id="captchaHeader">
-            <strong>Proc jste vybrali tyto vzorky?</strong>
+            <strong>Byly vybrány vzorky</strong>
         </div>
         <div class="captcha-grid" id="grid">
             <!-- Images will be displayed here -->
         </div>
-        <p>Vaše zadané údaje nebudou ukládány, zaznamenávány ani žádným způsobem archivovány.<br>Poskytnuté informace nebudou použity k tréninku žádného strojového učení ani k jinému typu analýzy či zpracování.</p>
+        <p>Vaše odpovědi budou uloženy, ale zvolené obrázky se neukládají. Data nebudou použita k tréninku žádného strojového učení ani k jinému typu analýzy či zpracování. Slouží výhradně jako součást výstavy a nebudou dále využívána mimo tento kontext.</p>
         <form method="POST" class="captcha-body" onsubmit="submitForm(event)">
             
             <div class="form-footer">
-                <textarea id="textInput" class="captcha-input" placeholder="Proc jste vybrali tyto vzorky? Napiste svoje odpovēdi sem." rows="5" required></textarea>
+                <textarea id="textInput" class="captcha-input" placeholder="Proč jste vybrali tyto vzorky? Napište svoje odpovědi sem." rows="5" required></textarea>
             </div>
             <button type="submit" class="captcha-button">Odeslat</button>
         </form>
