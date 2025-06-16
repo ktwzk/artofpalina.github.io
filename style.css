@@ -170,6 +170,30 @@ p {color: #999;padding: 0px 25px;}
     box-sizing: border-box;
 }
 
+.captcha-input::placeholder { /* Standard */
+    font-family: 'Roboto', sans-serif;
+}
+
+.captcha-input::-webkit-input-placeholder { /* WebKit, Blink, Edge */
+    font-family: 'Roboto', sans-serif;
+}
+
+.captcha-input:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+    font-family: 'Roboto', sans-serif;
+}
+
+.captcha-input::-moz-placeholder { /* Mozilla Firefox 19+ */
+    font-family: 'Roboto', sans-serif;
+}
+
+.captcha-input:-ms-input-placeholder { /* Internet Explorer 10-11 */
+    font-family: 'Roboto', sans-serif;
+}
+
+.captcha-input::-ms-input-placeholder { /* Microsoft Edge */
+    font-family: 'Roboto', sans-serif;
+}
+
 .text-item-wrapper {
     width: 100%;
     padding: 20px;
